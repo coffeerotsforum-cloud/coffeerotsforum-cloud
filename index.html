@@ -1,60 +1,549 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой первый сайт</title>
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: system-ui, sans-serif;
-            padding: 20px;
-        }
-        .card {
-            max-width: 500px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(15px);
-            border-radius: 40px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
-        }
-        img {
-            max-width: 200px;
-            border-radius: 20px;
-        }
-        a {
-            display: inline-block;
-            text-decoration: none;
-            font-size: 28px;
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin: 20px 0;
-        }
-        .tt-btn {
-            background: linear-gradient(45deg, #000, #ff0050);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>✦ Генератор ников | Telegram & Gmail</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 40%, #16213e 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem;
+      margin: 0;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(110px);
+      opacity: 0.3;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .orb1 {
+      width: 420px;
+      height: 420px;
+      background: #a78bfa;
+      top: -180px;
+      left: -120px;
+    }
+    .orb2 {
+      width: 380px;
+      height: 380px;
+      background: #38bdf8;
+      bottom: -140px;
+      right: -100px;
+    }
+    .orb3 {
+      width: 280px;
+      height: 280px;
+      background: #f472b6;
+      top: 50%;
+      left: 60%;
+      opacity: 0.2;
+    }
+
+    .glass-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 600px;
+      background: rgba(20, 20, 35, 0.55);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border-radius: 2.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.05);
+      padding: 2rem 1.8rem 2.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+      transition: all 0.3s ease;
+    }
+
+    h1 {
+      text-align: center;
+      font-weight: 500;
+      font-size: 2rem;
+      letter-spacing: 1px;
+      color: #f1e9ff;
+      text-shadow: 0 4px 15px rgba(168, 139, 250, 0.6);
+      margin-bottom: 0.2rem;
+      word-break: break-word;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #b9c2e0;
+      font-size: 0.95rem;
+      margin-top: -0.8rem;
+      font-weight: 300;
+      opacity: 0.85;
+    }
+
+    /* Переключатель Telegram / Gmail */
+    .toggle-container {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 3rem;
+      padding: 0.4rem;
+      margin: 0.3rem 0 0.6rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .toggle-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #cbd5e1;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 0.7rem 1rem;
+      border-radius: 2.5rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+    }
+
+    .toggle-btn.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      box-shadow: 0 6px 18px rgba(138, 92, 246, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      font-weight: 600;
+    }
+
+    .icon {
+      font-size: 1.2rem;
+    }
+
+    /* Карточка с результатом */
+    .result-box {
+      background: rgba(10, 10, 20, 0.5);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 1.8rem;
+      padding: 1.5rem 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+    }
+
+    .generated-name {
+      font-size: 2.2rem;
+      font-weight: 500;
+      color: #f5f3ff;
+      word-break: break-all;
+      text-align: center;
+      letter-spacing: 0.5px;
+      background: linear-gradient(to right, #e9d5ff, #bae6fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 12px #7c3aed);
+      min-height: 3.5rem;
+      line-height: 1.3;
+    }
+
+    .domain-hint {
+      color: #a5b4fc;
+      font-size: 0.9rem;
+      font-weight: 400;
+      background: rgba(79, 70, 229, 0.15);
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      letter-spacing: 0.2px;
+    }
+
+    .explain-block {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 1.2rem;
+      padding: 0.9rem 1.2rem;
+      color: #cdd5f0;
+      font-size: 0.9rem;
+      border-left: 3px solid #c084fc;
+      margin: 0.3rem 0;
+      line-height: 1.5;
+      backdrop-filter: blur(8px);
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: center;
+      margin-top: 0.4rem;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.8rem 1.5rem;
+      border-radius: 2.5rem;
+      font-weight: 500;
+      color: #f1f5f9;
+      font-size: 0.95rem;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(120deg, #7c3aed, #4f46e5);
+      border: 1px solid rgba(196, 167, 255, 0.6);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.5);
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(120deg, #8b5cf6, #6366f1);
+      border-color: #ddd6fe;
+      transform: scale(1.02);
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .copy-btn {
+      background: rgba(34, 211, 238, 0.12);
+      border-color: rgba(34, 211, 238, 0.4);
+    }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: #9ca3c0;
+      margin-top: 0.2rem;
+    }
+
+    hr {
+      border-color: rgba(255,255,255,0.08);
+      margin: 0.3rem 0;
+    }
+
+    @media (max-width: 450px) {
+      .glass-card {
+        padding: 1.5rem 1rem;
+      }
+      .generated-name {
+        font-size: 1.8rem;
+      }
+      .toggle-btn {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.6rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="card">
-        <img src="https://i.ibb.co/jZqvhRFz/9004a5671e798573326ff985fa180a44.gif" alt="decor">
-        <br>
-        <a href="#">🎬 СМОТРЕТЬ</a>
-        <br>
-        <a href="https://www.tiktok.com/@.....2456coffee?_r=1&_t=ZS-9547Tg4oLlk" class="tt-btn">📱 MY TT</a>
-    </div>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
+
+<div class="glass-card">
+  <h1>✨ Юзернейм-генератор</h1>
+  <div class="subtitle">красивые · свободные · стильные</div>
+
+  <!-- Переключатель режимов -->
+  <div class="toggle-container">
+    <button id="tgBtn" class="toggle-btn active">
+      <span class="icon">💬</span> Telegram
+    </button>
+    <button id="gmailBtn" class="toggle-btn">
+      <span class="icon">✉️</span> Gmail
+    </button>
+  </div>
+
+  <!-- Результат -->
+  <div class="result-box">
+    <div class="generated-name" id="displayName">lunar_wave</div>
+    <div class="domain-hint" id="domainHint">@username · Telegram</div>
+  </div>
+
+  <!-- Объяснение -->
+  <div class="explain-block" id="explainText">
+    💡 <strong>Стиль:</strong> мягкое сочетание, эстетика. Звучит свободно и запоминается.
+  </div>
+
+  <div class="button-group">
+    <button class="btn btn-primary" id="generateBtn">
+      <span>🌀</span> Сгенерировать
+    </button>
+    <button class="btn copy-btn" id="copyBtn">
+      <span>📋</span> Копировать
+    </button>
+  </div>
+
+  <div class="features">
+    <span>🌙 эстетика</span>
+    <span>🔮 уникальность</span>
+    <span>⚡ мгновенно</span>
+  </div>
+  <hr>
+  <div style="text-align: center; font-size: 0.75rem; color: #6b7280; margin-top: 0.2rem;">
+    нажми на ник — скопируется автоматически
+  </div>
+</div>
+
+<script>
+  (function() {
+    // --- БАЗЫ СЛОВ ДЛЯ ГЕНЕРАЦИИ ---
+    const prefixes = ["lunar", "astro", "neo", "void", "sunny", "crystal", "velvet", "echo", "onyx", "silver", "aurora", "cosmic", "zen", "flux", "opal", "drift", "haze", "ivy", "lynx", "orbit"];
+    const suffixes = ["wave", "pulse", "bloom", "ghost", "spark", "moss", "flame", "whisper", "comet", "quill", "soul", "vine", "glow", "frost", "beam", "hollow", "spire", "mist", "leaf", "nova"];
+    const decorators = ["_", ".", "-", ""];
+    const stylishChars = ["x", "v", "r", "s", "l", "n", "a"]; // для добавления изюминки
+
+    // Дополнительные паттерны для Gmail (более "человечные" ники)
+    const gmailPrefixes = ["alex", "max", "julia", "nora", "liam", "zoe", "mila", "lev", "kai", "aria", "noah", "ella", "ray", "ivy", "theo", "luna", "jasper", "iris", "milo", "ruby"];
+    const gmailSuffixes = ["co", "lab", "box", "hub", "mail", "post", "ink", "pad", "zone", "base", "ly", "es", "er", "on", "ia"];
+
+    // --- СОСТОЯНИЕ ---
+    let currentMode = "telegram"; // "telegram" или "gmail"
+    let currentGenerated = "lunar_wave"; // текущий сгенерированный ник (без домена)
+
+    // DOM элементы
+    const tgBtn = document.getElementById("tgBtn");
+    const gmailBtn = document.getElementById("gmailBtn");
+    const displayNameEl = document.getElementById("displayName");
+    const domainHintEl = document.getElementById("domainHint");
+    const explainTextEl = document.getElementById("explainText");
+    const generateBtn = document.getElementById("generateBtn");
+    const copyBtn = document.getElementById("copyBtn");
+
+    // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+    function randomItem(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function randomBetween(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // Генерация Telegram-ника (стильный, эстетичный)
+    function generateTelegramNick() {
+      const prefix = randomItem(prefixes);
+      const suffix = randomItem(suffixes);
+      const decor = randomItem(decorators);
+      
+      // Иногда добавляем стильную букву в конце или начале
+      let nick = "";
+      const pattern = Math.random();
+      
+      if (pattern < 0.3) {
+        // просто префикс + декоратор + суффикс
+        nick = `${prefix}${decor}${suffix}`;
+      } else if (pattern < 0.55) {
+        // префикс + декоратор + суффикс + случайная буква
+        const extraChar = randomItem(stylishChars);
+        nick = `${prefix}${decor}${suffix}${extraChar}`;
+      } else if (pattern < 0.75) {
+        // случайная буква + префикс + декоратор + суффикс
+        const extraChar = randomItem(stylishChars);
+        nick = `${extraChar}${prefix}${decor}${suffix}`;
+      } else {
+        // два слова через нижнее подчеркивание + цифра (редко)
+        const secondPrefix = randomItem(prefixes);
+        nick = `${prefix}_${secondPrefix}${randomBetween(0,9)}`;
+      }
+      
+      // Очистка на всякий случай: убираем двойные декораторы и некрасивые окончания
+      nick = nick.replace(/_{2,}/g, '_').replace(/\.{2,}/g, '.').replace(/-{2,}/g, '-');
+      // Убираем декоратор в самом начале/конце если он там оказался (кроме случаев когда это часть стиля)
+      if (nick.startsWith('_') || nick.startsWith('.') || nick.startsWith('-')) {
+        nick = nick.substring(1);
+      }
+      if (nick.endsWith('_') || nick.endsWith('.') || nick.endsWith('-')) {
+        nick = nick.slice(0, -1);
+      }
+      // Минимальная длина
+      if (nick.length < 4) {
+        nick = "aurora_" + randomItem(suffixes);
+      }
+      return nick.toLowerCase();
+    }
+
+    // Генерация Gmail-ника (похож на реальный email, чистый)
+    function generateGmailNick() {
+      const prefix = randomItem(gmailPrefixes);
+      const suffix = randomItem(gmailSuffixes);
+      const useNumber = Math.random() < 0.4;
+      const useDot = Math.random() < 0.5;
+      
+      let nick = "";
+      const patternRand = Math.random();
+      
+      if (patternRand < 0.35) {
+        // имя.фамилия стиль
+        const secondName = randomItem(["smith", "jones", "lee", "kim", "ray", "cole", "bennett", "shaw", "grey", "fox"]);
+        nick = `${prefix}.${secondName}`;
+      } else if (patternRand < 0.65) {
+        // имя + суффикс (как бренд)
+        nick = `${prefix}${suffix}`;
+      } else {
+        // имя + суффикс + возможно номер
+        nick = `${prefix}${suffix}`;
+        if (useNumber) {
+          nick += randomBetween(1, 99);
+        }
+      }
+      
+      // Добавляем точку или число если ещё нет
+      if (!useNumber && !nick.includes('.') && Math.random() < 0.3) {
+        nick += randomBetween(10, 99);
+      }
+      
+      // Очистка: только буквы, цифры, точки (gmail разрешает точки)
+      nick = nick.replace(/[^a-zA-Z0-9.]/g, '');
+      // Не начинать и не заканчивать точкой
+      if (nick.startsWith('.')) nick = nick.substring(1);
+      if (nick.endsWith('.')) nick = nick.slice(0, -1);
+      
+      if (nick.length < 5) {
+        nick = prefix + randomItem(gmailSuffixes) + randomBetween(10,99);
+      }
+      return nick.toLowerCase();
+    }
+
+    // Обновить UI в зависимости от режима и сгенерированного ника
+    function updateDisplayForMode() {
+      let displayValue = currentGenerated;
+      let hintText = "";
+      let explainText = "";
+
+      if (currentMode === "telegram") {
+        displayValue = currentGenerated;
+        hintText = `@${currentGenerated} · Telegram`;
+        explainText = `💬 <strong>Telegram-юзернейм:</strong> «${currentGenerated}» — звучит загадочно, свободно. Можно использовать как @${currentGenerated}.`;
+      } else {
+        // Gmail режим
+        const gmailAddress = `${currentGenerated}@gmail.com`;
+        displayValue = gmailAddress;
+        hintText = `📧 Gmail · ${gmailAddress}`;
+        explainText = `✉️ <strong>Gmail-адрес:</strong> «${currentGenerated}@gmail.com» — чистый, легко запоминается. Подходит для регистраций.`;
+      }
+
+      displayNameEl.textContent = displayValue;
+      domainHintEl.textContent = hintText;
+      explainTextEl.innerHTML = explainText;
+    }
+
+    // Генерация нового ника в зависимости от режима
+    function generateNewNick() {
+      if (currentMode === "telegram") {
+        currentGenerated = generateTelegramNick();
+      } else {
+        currentGenerated = generateGmailNick();
+      }
+      updateDisplayForMode();
+    }
+
+    // Переключение режима
+    function setMode(mode) {
+      if (currentMode === mode) return;
+      currentMode = mode;
+      
+      // Обновляем активную кнопку
+      if (mode === "telegram") {
+        tgBtn.classList.add("active");
+        gmailBtn.classList.remove("active");
+      } else {
+        gmailBtn.classList.add("active");
+        tgBtn.classList.remove("active");
+      }
+      
+      // Генерируем новый ник для выбранного режима (чтобы соответствовал стилю)
+      if (mode === "telegram") {
+        currentGenerated = generateTelegramNick();
+      } else {
+        currentGenerated = generateGmailNick();
+      }
+      updateDisplayForMode();
+    }
+
+    // Копирование в буфер обмена
+    async function copyToClipboard() {
+      let textToCopy = "";
+      if (currentMode === "telegram") {
+        textToCopy = currentGenerated; // копируем сам ник без @ (или с @ по желанию, сделаем без @ для удобства)
+      } else {
+        textToCopy = `${currentGenerated}@gmail.com`;
+      }
+      
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+        // Визуальная обратная связь
+        copyBtn.innerHTML = `<span>✅</span> Скопировано`;
+        setTimeout(() => {
+          copyBtn.innerHTML = `<span>📋</span> Копировать`;
+        }, 1800);
+      } catch (err) {
+        // Фоллбэк
+        const textarea = document.createElement('textarea');
+        textarea.value = textToCopy;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        copyBtn.innerHTML = `<span>✅</span> Скопировано`;
+        setTimeout(() => {
+          copyBtn.innerHTML = `<span>📋</span> Копировать`;
+        }, 1800);
+      }
+    }
+
+    // Инициализация и обработчики
+    function init() {
+      // Стартовый ник для Telegram
+      currentGenerated = generateTelegramNick();
+      updateDisplayForMode();
+
+      // Слушатели кнопок
+      tgBtn.addEventListener("click", () => setMode("telegram"));
+      gmailBtn.addEventListener("click", () => setMode("gmail"));
+      generateBtn.addEventListener("click", generateNewNick);
+      copyBtn.addEventListener("click", copyToClipboard);
+      
+      // Дополнительно: клик по нику тоже копирует
+      displayNameEl.addEventListener("click", copyToClipboard);
+      displayNameEl.style.cursor = "pointer";
+    }
+
+    // Запуск
+    init();
+  })();
+</script>
 </body>
 </html>
-
